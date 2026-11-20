@@ -3,83 +3,64 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leonida Trophy Atlas — GTA 6 Trophy Guide &amp; Tracker</title>
-<meta name="description" content="Offline guide and tracker for all 55 Grand Theft Auto VI trophies on PlayStation 5: roadmap to the platinum, missable flags, cited guides, progress saved in your browser.">
+<title>Leonida Trophy Atlas — GTA VI Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 PlayStation 5 trophies of Grand Theft Auto VI, with a roadmap to the platinum, missable flags and cited guides.">
 <link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
 </head>
 <body>
-<noscript><p class="panel warn">This guide needs JavaScript to load its trophy list and save your progress. Enable JavaScript and reload.</p></noscript>
 <header class="masthead">
-  <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; 55 trophies</p>
+  <p class="kicker">Grand Theft Auto VI · PlayStation 5</p>
   <h1>Leonida Trophy Atlas</h1>
-  <p class="lede">Every trophy, its official name, description and grade, a guide in our own words with its sources named, and a tracker that remembers your progress. Works fully offline &mdash; no account, no network, nothing leaves your browser.</p>
-  <div class="progress-wrap" aria-label="Trophy progress">
-    <div class="progress-line"><span id="progressText">0 of 55 earned &middot; 0%</span><span id="gradeText"></span></div>
-    <div class="bar"><div id="progressBar" class="fill" style="width:0%"></div></div>
-    <p class="counts" id="gradeCounts"></p>
+  <p class="tagline">Every trophy, its guide and its sources — and a checklist that remembers where you are. Works fully offline.</p>
+  <div class="progress-wrap" role="status">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <p class="progress-text" id="progress-text">Loading trophies…</p>
+    <p class="grade-counts" id="grade-counts"></p>
   </div>
 </header>
 
 <main>
-  <section class="panel warn" id="missableBanner">
-    <h2>Read this first: one trophy can be missed</h2>
-    <p><strong>Positive Mental Attitude</strong> (meditate at every spot) is the list's only possibly missable trophy. The first meditation is Lucia's balcony session at Jason's house in Chapter 1, offered after the mission <em>Down to Earth</em> &mdash; do it before Chapter 1 ends. Everything else can be finished in free roam after the story. Cheats disable trophies and saving, so keep them off. Sources: PowerPyx, GTABase, KeenGamer.</p>
+  <section class="toolbar" aria-label="Tracker controls">
+    <label class="search-box">Search
+      <input type="search" id="search" placeholder="Search a trophy, a mission, a place…" autocomplete="off">
+    </label>
+    <div class="filters" id="filters" role="group" aria-label="Filter by kind"></div>
+    <div class="toggles">
+      <label><input type="checkbox" id="spoiler-toggle"> Show spoilers</label>
+      <label><input type="checkbox" id="earned-only"> Earned only</label>
+    </div>
+    <div class="actions">
+      <button type="button" id="export-btn">Export progress</button>
+      <button type="button" id="import-btn">Import progress</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
+      <button type="button" id="reset-btn">Reset</button>
+    </div>
   </section>
 
-  <section class="panel" id="roadmapPanel">
-    <h2>Roadmap to the platinum</h2>
-    <p class="muted">Built from the official descriptions. About 200 hours, difficulty 4/10, one playthrough, all offline (PowerPyx).</p>
-    <ol id="roadmap" class="roadmap"></ol>
+  <nav class="tabs" aria-label="Views">
+    <button type="button" id="tab-checklist" class="tab active">Checklist</button>
+    <button type="button" id="tab-roadmap" class="tab">Roadmap to Platinum</button>
+  </nav>
+
+  <section id="view-checklist">
+    <div class="layout">
+      <div class="list-col" id="trophy-list" aria-live="polite"></div>
+      <aside class="detail-col" id="detail" aria-live="polite"></aside>
+    </div>
   </section>
 
-  <section class="panel controls" id="controls">
-    <h2>Tracker</h2>
-    <div class="control-row">
-      <label class="search">Search <input id="search" type="search" placeholder="Trophy name, mission, or word&hellip;" autocomplete="off"></label>
-      <label class="grade-pick">Grade
-        <select id="gradeFilter">
-          <option value="all">All grades</option>
-          <option value="platinum">Platinum</option>
-          <option value="gold">Gold</option>
-          <option value="silver">Silver</option>
-          <option value="bronze">Bronze</option>
-        </select>
-      </label>
-    </div>
-    <div class="control-row" id="kindFilters" role="group" aria-label="Filter by kind">
-      <button type="button" data-kind="all" class="chip on">All 55</button>
-      <button type="button" data-kind="story" class="chip">Story</button>
-      <button type="button" data-kind="missable" class="chip">Missable</button>
-      <button type="button" data-kind="collectibles" class="chip">Collectibles</button>
-      <button type="button" data-kind="activities" class="chip">Activities</button>
-      <button type="button" data-kind="crime" class="chip">Crime</button>
-      <button type="button" data-kind="misc" class="chip">Side &amp; secrets</button>
-      <button type="button" data-kind="online" class="chip">Online</button>
-    </div>
-    <div class="control-row">
-      <label class="toggle"><input id="spoilerToggle" type="checkbox" checked> Hide story spoilers until earned</label>
-      <label class="toggle"><input id="earnedOnly" type="checkbox"> Earned only</label>
-      <label class="toggle"><input id="hideEarned" type="checkbox"> Hide earned</label>
-    </div>
-    <div class="control-row">
-      <button id="exportBtn" type="button">Export progress (.json)</button>
-      <label class="import-btn">Import progress <input id="importFile" type="file" accept="application/json,.json"></label>
-      <button id="resetBtn" type="button">Reset progress</button>
-      <span id="saveNote" class="muted" role="status"></span>
-    </div>
-    <p id="resultCount" class="muted" role="status"></p>
-  </section>
-
-  <section id="list" class="trophy-list" aria-live="polite"></section>
-
-  <section class="panel" id="aboutPanel">
-    <h2>About this guide</h2>
-    <p>Names and descriptions are the official ones as PlayStation publishes them, listed by Exophase and PSNProfiles (55 trophies: 1 platinum, 2 gold, 6 silver, 46 bronze, 28 hidden). Every guide is written in our own words for this entry and names its sources beside it &mdash; PowerPyx, GTABase, Push Square, KeenGamer and HowToVideoGame &mdash; so you can check any fact yourself. The game has no online trophies and no mission replay, but free roam continues after the final mission. Progress is stored only in this browser's localStorage; export saves it to a file you can import back on any machine.</p>
-    <p class="muted">Unofficial fan guide. Not affiliated with Rockstar Games or PlayStation. No Rockstar logo or official artwork is used here.</p>
+  <section id="view-roadmap" hidden>
+    <h2 class="roadmap-title">Roadmap to the Platinum</h2>
+    <p class="roadmap-intro">Six stages, in order. Finish the story first, then the stranger strands, activities, crime, collectibles — and mop up the hidden trophies and 100% completion last. The only missable trophy is Positive Mental Attitude: meditate at Jason's house and Lucia's balcony in Chapter 1.</p>
+    <div id="roadmap"></div>
   </section>
 </main>
 
-<script src="roadmap.js"></script>
-<script src="app.js"></script>
+<footer>
+  <p>Names and descriptions are the official PlayStation trophy list. Guides are written for this page in its own words, each citing its sources. No Rockstar Games logo, artwork or game screenshots are used. Progress is saved in your browser only (localStorage) and never leaves your device.</p>
+</footer>
+
+<p id="toast" class="toast" hidden></p>
 </body>
 </html>
